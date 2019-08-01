@@ -1,0 +1,7 @@
+{
+  "name": "selevia/env-validator",
+  "description": "The script for validate env variables",
+  "type": "library",
+  "license": "Copyright Selevia",
+  "require": {}
+}
