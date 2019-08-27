@@ -4,7 +4,7 @@
 namespace Selevia\Common\Command;
 
 
-use Selevia\Common\EnvValidator\Response\VarResponse;
+use Selevia\Common\EnvValidator\Result\VarResult;
 use Selevia\Common\EnvValidator\Status\Status;
 use Selevia\Common\EnvValidator\Validator;
 use Symfony\Component\Console\Command\Command;
@@ -50,14 +50,14 @@ class EnvValidatorCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $response = $this->getValidator()->execute();
+        $result = $this->getValidator()->validate();
 
-        $successResponses = $response->getVarResponseList(Status::TYPE_SUCCESS);
-        $warningResponses = $response->getVarResponseList(Status::TYPE_WARNING);
-        $errorResponses = $response->getVarResponseList(Status::TYPE_ERROR);
+        $successResults = $result->listVarResults(Status::TYPE_SUCCESS);
+        $warningResults = $result->listVarResults(Status::TYPE_WARNING);
+        $errorResults = $result->listVarResults(Status::TYPE_ERROR);
 
-        $this->printTitle(count($successResponses), count($warningResponses), count($errorResponses), $io);
-        $this->printMessages($errorResponses, $warningResponses, $io);
+        $this->printTitle(count($successResults), count($warningResults), count($errorResults), $io);
+        $this->printMessages($errorResults, $warningResults, $io);
     }
 
     /**
@@ -78,17 +78,17 @@ class EnvValidatorCommand extends Command
     }
 
     /**
-     * @param VarResponse[] $errorResponses
-     * @param VarResponse[] $warningResponses
-     * @param SymfonyStyle  $io
+     * @param VarResult[]  $errorResults
+     * @param VarResult[]  $warningResults
+     * @param SymfonyStyle $io
      */
-    protected function printMessages(array $errorResponses, array $warningResponses, SymfonyStyle $io): void
+    protected function printMessages(array $errorResults, array $warningResults, SymfonyStyle $io): void
     {
-        foreach ($errorResponses as $errorResponse) {
-            $io->writeln(sprintf('<fg=%s>%s</>', 'red', $errorResponse->createMessage()));
+        foreach ($errorResults as $errorResult) {
+            $io->writeln(sprintf('<fg=%s>%s</>', 'red', $errorResult->createMessage()));
         }
-        foreach ($warningResponses as $warningResponse) {
-            $io->writeln(sprintf('<fg=%s>%s</>', 'yellow', $warningResponse->createMessage()));
+        foreach ($warningResults as $warningResult) {
+            $io->writeln(sprintf('<fg=%s>%s</>', 'yellow', $warningResult->createMessage()));
         }
     }
 

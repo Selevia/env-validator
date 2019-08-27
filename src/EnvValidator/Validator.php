@@ -4,8 +4,8 @@
 namespace Selevia\Common\EnvValidator;
 
 
-use Selevia\Common\EnvValidator\Response\ValidatorResponse;
-use Selevia\Common\EnvValidator\Response\VarResponse;
+use Selevia\Common\EnvValidator\Result\ValidationResult;
+use Selevia\Common\EnvValidator\Result\VarResult;
 use Selevia\Common\EnvValidator\Status\StatusFactory;
 
 class Validator
@@ -36,19 +36,19 @@ class Validator
     /**
      * Validates the loaded env vars and provides the results
      *
-     * @return ValidatorResponse
+     * @return ValidationResult
      */
-    public function execute(): ValidatorResponse
+    public function validate(): ValidationResult
     {
         $envVars = $this->getLoader()->loadEnvVariables();
         $envExampleVars = $this->getLoader()->loadEnvExampleVariables();
 
-        $response = new ValidatorResponse();
-        foreach ($this->createVarResponses($envVars, $envExampleVars) as $varResponse) {
-            $response->addVarResponse($varResponse);
+        $result = new ValidationResult();
+        foreach ($this->determineResults($envVars, $envExampleVars) as $varResult) {
+            $result->addVarResult($varResult);
         }
 
-        return $response;
+        return $result;
     }
 
     /**
@@ -57,13 +57,13 @@ class Validator
      * @param string[] $envVars
      * @param string[] $envExampleVars
      *
-     * @return iterable|VarResponse[]
+     * @return iterable|VarResult[]
      */
-    protected function createVarResponses(array $envVars, array $envExampleVars): iterable
+    protected function determineResults(array $envVars, array $envExampleVars): iterable
     {
         $missingVars = array_diff_key($envExampleVars, $envVars);
         foreach ($missingVars as $key => $value) {
-            yield new VarResponse(
+            yield new VarResult(
                 $key,
                 $this->getStatusFactory()->createError('Expected env var %s was completely missing')
             );
@@ -71,7 +71,7 @@ class Validator
 
         $unexpectedVars = array_diff_key($envVars, $envExampleVars);
         foreach ($unexpectedVars as $key => $value) {
-            yield new VarResponse(
+            yield new VarResult(
                 $key,
                 $this->getStatusFactory()->createWarning('Unexpected env var %s encountered')
             );
@@ -83,7 +83,7 @@ class Validator
                 ? $this->getStatusFactory()->createWarning('Env var %s was present, but the value was empty')
                 : $this->getStatusFactory()->createSuccess('Expected env var %s was found and had a non-empty value');
 
-            yield new VarResponse(
+            yield new VarResult(
                 $key,
                 $status
             );

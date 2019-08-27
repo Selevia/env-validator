@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Response;
+namespace Selevia\Common\EnvValidator\Result;
 
 
 use Selevia\Common\EnvValidator\Status\Status;
 
-class VarResponse
+class VarResult
 {
 
     /**
@@ -20,7 +20,7 @@ class VarResponse
     protected $status;
 
     /**
-     * VarResponse constructor.
+     * VarResult constructor.
      *
      * @param string $name
      * @param Status $status
@@ -39,17 +39,11 @@ class VarResponse
         return sprintf($this->getStatus()->getMessage(), $this->getName());
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return Status
-     */
     public function getStatus(): Status
     {
         return $this->status;
