@@ -17,12 +17,6 @@ class Variable
      */
     protected $value;
 
-    /**
-     * Variable constructor.
-     *
-     * @param string $name
-     * @param string $value
-     */
     public function __construct(string $name, string $value)
     {
         $this->name = $name;
@@ -39,17 +33,11 @@ class Variable
         return trim($this->getValue()) === '';
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return $this->value;
