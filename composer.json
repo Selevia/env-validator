@@ -9,7 +9,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Selevia\\Common\\": "src/"
+      "Selevia\\Common\\EnvValidator\\": "src/"
     }
   },
   "bin": ["bin/env-validator"]

@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Selevia\Common\Command;
+namespace Selevia\Common\EnvValidator\Command;
 
 
-use Selevia\Common\EnvValidator\Result\VarResult;
-use Selevia\Common\EnvValidator\Status\Status;
-use Selevia\Common\EnvValidator\Validator;
+use Selevia\Common\EnvValidator\Validator\Result\VarResult;
+use Selevia\Common\EnvValidator\Validator\Status\Status;
+use Selevia\Common\EnvValidator\Validator\Validator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

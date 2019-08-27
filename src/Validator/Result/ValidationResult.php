@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Result;
+namespace Selevia\Common\EnvValidator\Validator\Result;
 
 
-use Selevia\Common\EnvValidator\Result\VarResult;
+use Selevia\Common\EnvValidator\Validator\Result\VarResult;
 
 class ValidationResult
 {

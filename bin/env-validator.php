@@ -1,7 +1,7 @@
 <?php
 
-use Selevia\Common\Command\EnvValidatorCommand;
-use Selevia\Common\Command\EnvValidatorCommandFactory;
+use Selevia\Common\EnvValidator\Command\EnvValidatorCommand;
+use Selevia\Common\EnvValidator\Command\EnvValidatorCommandFactory;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\CommandLoader\FactoryCommandLoader;
 
