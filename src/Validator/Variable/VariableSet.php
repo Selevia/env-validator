@@ -6,6 +6,7 @@ namespace Selevia\Common\EnvValidator\Validator\Variable;
 
 use Assert\Assertion;
 use Doctrine\Common\Collections\Collection;
+use InvalidArgumentException;
 
 class VariableSet
 {
@@ -15,6 +16,13 @@ class VariableSet
      */
     protected $variables;
 
+    /**
+     * VariableSet constructor.
+     *
+     * @param Collection $variables
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(Collection $variables)
     {
         $this->setVariables($variables);
@@ -92,6 +100,11 @@ class VariableSet
         return $this->getVariables()->toArray();
     }
 
+    /**
+     * @param Collection $variables
+     *
+     * @throws InvalidArgumentException
+     */
     protected function setVariables(Collection $variables): void
     {
         Assertion::allIsInstanceOf($variables->toArray(), Variable::class);
