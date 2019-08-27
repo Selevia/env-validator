@@ -3,5 +3,14 @@
   "description": "The script for validate env variables",
   "type": "library",
   "license": "Copyright Selevia",
-  "require": {}
+  "require": {
+    "symfony/console": "^4.3",
+    "vlucas/phpdotenv": "^3.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Selevia\\Common\\": "src/"
+    }
+  },
+  "bin": ["bin/env-validator"]
 }
