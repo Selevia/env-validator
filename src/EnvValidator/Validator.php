@@ -40,11 +40,11 @@ class Validator
      */
     public function validate(): ValidationResult
     {
-        $envVars = $this->getLoader()->loadEnvVariables();
-        $envExampleVars = $this->getLoader()->loadEnvExampleVariables();
+        $actualVars = $this->getLoader()->loadActualVariables();
+        $expectedVars = $this->getLoader()->loadExpectedVariables();
 
         $result = new ValidationResult();
-        foreach ($this->determineResults($envVars, $envExampleVars) as $varResult) {
+        foreach ($this->determineResults($actualVars, $expectedVars) as $varResult) {
             $result->addVarResult($varResult);
         }
 
@@ -54,14 +54,14 @@ class Validator
     /**
      * Compares the env vars and yields the result for each one
      *
-     * @param string[] $envVars
-     * @param string[] $envExampleVars
+     * @param string[] $actualVars
+     * @param string[] $expectedVars
      *
      * @return iterable|VarResult[]
      */
-    protected function determineResults(array $envVars, array $envExampleVars): iterable
+    protected function determineResults(array $actualVars, array $expectedVars): iterable
     {
-        $missingVars = array_diff_key($envExampleVars, $envVars);
+        $missingVars = array_diff_key($expectedVars, $actualVars);
         foreach ($missingVars as $key => $value) {
             yield new VarResult(
                 $key,
@@ -69,7 +69,7 @@ class Validator
             );
         }
 
-        $unexpectedVars = array_diff_key($envVars, $envExampleVars);
+        $unexpectedVars = array_diff_key($actualVars, $expectedVars);
         foreach ($unexpectedVars as $key => $value) {
             yield new VarResult(
                 $key,
@@ -77,7 +77,7 @@ class Validator
             );
         }
 
-        $presentExpectedVars = array_intersect_key($envVars, $envExampleVars);
+        $presentExpectedVars = array_intersect_key($actualVars, $expectedVars);
         foreach ($presentExpectedVars as $key => $value) {
             $status = empty($value)
                 ? $this->getStatusFactory()->createWarning('Env var %s was present, but the value was empty')

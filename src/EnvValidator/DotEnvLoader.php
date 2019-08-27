@@ -11,8 +11,8 @@ use Dotenv\Environment\DotenvFactory;
 class DotEnvLoader implements Loader
 {
 
-    protected const ENV_DEFAULT_FILE = '.env';
-    protected const ENV_EXAMPLE_DEFAULT_FILE = '.env.example';
+    protected const DEFAULT_ACTUAL_ENV_FILE = '.env';
+    protected const DEFAULT_EXPECTED_ENV_FILE = '.env.example';
 
     /**
      * @var string
@@ -22,36 +22,36 @@ class DotEnvLoader implements Loader
     /**
      * @var string
      */
-    protected $envFile;
+    protected $envFileActual;
 
     /**
      * @var string
      */
-    protected $envExampleFile;
+    protected $envFileExpected;
 
     /**
      * DotEnvLoader constructor.
      *
      * @param string $path
-     * @param string $envFile
-     * @param string $envExamplePath
+     * @param string $envFileActual
+     * @param string $envFileExpected
      */
     public function __construct(
         string $path,
-        string $envFile = self::ENV_DEFAULT_FILE,
-        string $envExamplePath = self::ENV_EXAMPLE_DEFAULT_FILE
+        string $envFileActual = self::DEFAULT_ACTUAL_ENV_FILE,
+        string $envFileExpected = self::DEFAULT_EXPECTED_ENV_FILE
     ) {
         $this->path = $path;
-        $this->envFile = $envFile;
-        $this->envExampleFile = $envExamplePath;
+        $this->envFileActual = $envFileActual;
+        $this->envFileExpected = $envFileExpected;
     }
 
     /**
      * @inheritdoc
      */
-    public function loadEnvVariables(): array
+    public function loadActualVariables(): array
     {
-        $dotenv = Dotenv::create($this->getPath(), $this->getEnvFile(), new DotenvFactory([new ArrayAdapter()]));
+        $dotenv = Dotenv::create($this->getPath(), $this->getEnvFileActual(), new DotenvFactory([new ArrayAdapter()]));
 
         return $dotenv->load();
     }
@@ -59,35 +59,26 @@ class DotEnvLoader implements Loader
     /**
      * @inheritdoc
      */
-    public function loadEnvExampleVariables(): array
+    public function loadExpectedVariables(): array
     {
-        $dotenv = Dotenv::create($this->getPath(), $this->getEnvExampleFile(), new DotenvFactory([new ArrayAdapter()]));
+        $dotenv = Dotenv::create($this->getPath(), $this->getEnvFileExpected(), new DotenvFactory([new ArrayAdapter()]));
 
         return $dotenv->load();
     }
 
-    /**
-     * @return string
-     */
     protected function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @return string
-     */
-    protected function getEnvFile(): string
+    protected function getEnvFileActual(): string
     {
-        return $this->envFile;
+        return $this->envFileActual;
     }
 
-    /**
-     * @return string
-     */
-    protected function getEnvExampleFile(): string
+    protected function getEnvFileExpected(): string
     {
-        return $this->envExampleFile;
+        return $this->envFileExpected;
     }
 
 }

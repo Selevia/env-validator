@@ -8,12 +8,16 @@ interface Loader
 {
 
     /**
-     * @return array
+     * Returns the list of actual env vars
+     *
+     * @return string[]
      */
-    public function loadEnvVariables(): array;
+    public function loadActualVariables(): array;
 
     /**
-     * @return array
+     * Returns the list of expected env vars
+     *
+     * @return string[]
      */
-    public function loadEnvExampleVariables(): array;
+    public function loadExpectedVariables(): array;
 }
