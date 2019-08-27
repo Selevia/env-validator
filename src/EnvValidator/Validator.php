@@ -34,6 +34,8 @@ class Validator
     }
 
     /**
+     * Validates the loaded env vars and provides the results
+     *
      * @return ValidatorResponse
      */
     public function execute(): ValidatorResponse
@@ -50,40 +52,41 @@ class Validator
     }
 
     /**
-     * @param array $envVars
-     * @param array $envExampleVars
+     * Compares the env vars and yields the result for each one
+     *
+     * @param string[] $envVars
+     * @param string[] $envExampleVars
      *
      * @return iterable|VarResponse[]
      */
     protected function createVarResponses(array $envVars, array $envExampleVars): iterable
     {
-        foreach (array_diff_key($envExampleVars, $envVars) as $key => $value) {
+        $missingVars = array_diff_key($envExampleVars, $envVars);
+        foreach ($missingVars as $key => $value) {
             yield new VarResponse(
                 $key,
                 $this->getStatusFactory()->createError('Expected env var %s was completely missing')
             );
         }
 
-        foreach (array_diff_key($envVars, $envExampleVars) as $key => $value) {
+        $unexpectedVars = array_diff_key($envVars, $envExampleVars);
+        foreach ($unexpectedVars as $key => $value) {
             yield new VarResponse(
                 $key,
                 $this->getStatusFactory()->createWarning('Unexpected env var %s encountered')
             );
         }
 
-        $expectedEnvVars = array_intersect_key($envVars, $envExampleVars);
-        foreach ($expectedEnvVars as $key => $value) {
-            if (empty($value)) {
-                yield new VarResponse(
-                    $key,
-                    $this->getStatusFactory()->createWarning('Env var %s was present, but the value was empty')
-                );
-            } else {
-                yield new VarResponse(
-                    $key,
-                    $this->getStatusFactory()->createSuccess('Expected env var %s was found and had a non-empty value')
-                );
-            }
+        $presentExpectedVars = array_intersect_key($envVars, $envExampleVars);
+        foreach ($presentExpectedVars as $key => $value) {
+            $status = empty($value)
+                ? $this->getStatusFactory()->createWarning('Env var %s was present, but the value was empty')
+                : $this->getStatusFactory()->createSuccess('Expected env var %s was found and had a non-empty value');
+
+            yield new VarResponse(
+                $key,
+                $status
+            );
         }
     }
 
