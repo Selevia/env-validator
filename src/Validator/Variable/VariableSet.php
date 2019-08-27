@@ -112,7 +112,7 @@ class VariableSet
         $this->variables = $variables;
     }
 
-    public function getVariables(): Collection
+    protected function getVariables(): Collection
     {
         return $this->variables;
     }
