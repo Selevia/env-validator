@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator;
+namespace Selevia\Common\EnvValidator\Validator;
 
 
 use Dotenv\Dotenv;

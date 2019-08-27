@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator;
+namespace Selevia\Common\EnvValidator\Validator;
 
 
-use Selevia\Common\EnvValidator\Result\ValidationResult;
-use Selevia\Common\EnvValidator\Result\VarResult;
-use Selevia\Common\EnvValidator\Status\StatusFactory;
+use Selevia\Common\EnvValidator\Validator\Result\ValidationResult;
+use Selevia\Common\EnvValidator\Validator\Result\VarResult;
+use Selevia\Common\EnvValidator\Validator\Status\StatusFactory;
 
 class Validator
 {
