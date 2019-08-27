@@ -19,7 +19,7 @@ if (! $loader) {
 }
 
 $commandLoader = new FactoryCommandLoader([
-    EnvValidatorCommand::COMMAND_NAME => new EnvValidatorCommandFactory,
+    EnvValidatorCommand::COMMAND_NAME => new EnvValidatorCommandFactory(),
 ]);
 
 $application = new Application();
