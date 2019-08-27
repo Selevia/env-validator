@@ -7,6 +7,7 @@ namespace Selevia\Common\EnvValidator\Validator;
 use Selevia\Common\EnvValidator\Validator\Result\ValidationResult;
 use Selevia\Common\EnvValidator\Validator\Result\VarResult;
 use Selevia\Common\EnvValidator\Validator\Status\StatusFactory;
+use Selevia\Common\EnvValidator\Validator\Variable\VariableSet;
 
 class Validator
 {
@@ -40,11 +41,11 @@ class Validator
      */
     public function validate(): ValidationResult
     {
-        $actualVars = $this->getLoader()->loadActualVariables();
-        $expectedVars = $this->getLoader()->loadExpectedVariables();
+        $actualVariableSet = $this->getLoader()->loadActualVariables();
+        $expectedVariableSet = $this->getLoader()->loadExpectedVariables();
 
         $result = new ValidationResult();
-        foreach ($this->determineResults($actualVars, $expectedVars) as $varResult) {
+        foreach ($this->determineResults($actualVariableSet, $expectedVariableSet) as $varResult) {
             $result->addVarResult($varResult);
         }
 
@@ -54,37 +55,37 @@ class Validator
     /**
      * Compares the env vars and yields the result for each one
      *
-     * @param string[] $actualVars
-     * @param string[] $expectedVars
+     * @param VariableSet $actualVariableSet
+     * @param VariableSet $expectedVariableSet
      *
      * @return iterable|VarResult[]
      */
-    protected function determineResults(array $actualVars, array $expectedVars): iterable
+    protected function determineResults(VariableSet $actualVariableSet, VariableSet $expectedVariableSet): iterable
     {
-        $missingVars = array_diff_key($expectedVars, $actualVars);
-        foreach ($missingVars as $key => $value) {
+        $missingVars = $expectedVariableSet->subtract($actualVariableSet);
+        foreach ($missingVars->toArray() as $variable) {
             yield new VarResult(
-                $key,
+                $variable->getName(),
                 $this->getStatusFactory()->createError('Expected env var %s was completely missing')
             );
         }
 
-        $unexpectedVars = array_diff_key($actualVars, $expectedVars);
-        foreach ($unexpectedVars as $key => $value) {
+        $unexpectedVars = $actualVariableSet->subtract($expectedVariableSet);
+        foreach ($unexpectedVars->toArray() as $variable) {
             yield new VarResult(
-                $key,
+                $variable->getName(),
                 $this->getStatusFactory()->createWarning('Unexpected env var %s encountered')
             );
         }
 
-        $presentExpectedVars = array_intersect_key($actualVars, $expectedVars);
-        foreach ($presentExpectedVars as $key => $value) {
-            $status = empty($value)
+        $presentExpectedVars = $actualVariableSet->intersect($expectedVariableSet);
+        foreach ($presentExpectedVars->toArray() as $variable) {
+            $status = $variable->isEmpty()
                 ? $this->getStatusFactory()->createWarning('Env var %s was present, but the value was empty')
                 : $this->getStatusFactory()->createSuccess('Expected env var %s was found and had a non-empty value');
 
             yield new VarResult(
-                $key,
+                $variable->getName(),
                 $status
             );
         }

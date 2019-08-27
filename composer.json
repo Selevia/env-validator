@@ -5,7 +5,9 @@
   "license": "Copyright Selevia",
   "require": {
     "symfony/console": "^4.3",
-    "vlucas/phpdotenv": "^3.4"
+    "vlucas/phpdotenv": "^3.4",
+    "doctrine/collections": "^1.6",
+    "beberlei/assert": "^3.2"
   },
   "autoload": {
     "psr-4": {
