@@ -9,52 +9,52 @@ use LogicException;
 class Status
 {
 
-    public const STATUS_SUCCESS = 'Success';
-    public const STATUS_WARNING = 'Warning';
-    public const STATUS_ERROR = 'Error';
+    public const TYPE_SUCCESS = 'Success';
+    public const TYPE_WARNING = 'Warning';
+    public const TYPE_ERROR = 'Error';
 
     protected const STATUS_LIST = [
-        self::STATUS_SUCCESS,
-        self::STATUS_WARNING,
-        self::STATUS_ERROR,
+        self::TYPE_SUCCESS,
+        self::TYPE_WARNING,
+        self::TYPE_ERROR,
     ];
 
     /**
      * @var string
      */
-    protected $status;
+    protected $type;
 
     /**
      * @var string
      */
     protected $message;
 
-    public function __construct(string $status, string $message)
+    public function __construct(string $type, string $message)
     {
-        $this->setStatus($status);
+        $this->setType($type);
         $this->message = $message;
     }
 
     /**
      * @inheritdoc
      */
-    public function getStatus(): string
+    public function getType(): string
     {
-        return $this->status;
+        return $this->type;
     }
 
     /**
-     * @param string $status
+     * @param string $type
      *
      * @throws LogicException When the status type is unrecognized
      */
-    protected function setStatus(string $status): void
+    protected function setType(string $type): void
     {
-        if (!in_array($status, self::STATUS_LIST, true)) {
-            throw new LogicException("Unrecognized status: $status");
+        if (!in_array($type, self::STATUS_LIST, true)) {
+            throw new LogicException("Unrecognized status: $type");
         }
 
-        $this->status = $status;
+        $this->type = $type;
     }
 
     /**

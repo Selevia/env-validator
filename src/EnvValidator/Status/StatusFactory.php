@@ -14,7 +14,7 @@ class StatusFactory
      */
     public function createSuccess(string $message): Status
     {
-        return new Status(Status::STATUS_SUCCESS, $message);
+        return new Status(Status::TYPE_SUCCESS, $message);
     }
 
     /**
@@ -24,7 +24,7 @@ class StatusFactory
      */
     public function createError(string $message): Status
     {
-        return new Status(Status::STATUS_ERROR, $message);
+        return new Status(Status::TYPE_ERROR, $message);
     }
 
     /**
@@ -34,6 +34,6 @@ class StatusFactory
      */
     public function createWarning(string $message): Status
     {
-        return new Status(Status::STATUS_WARNING, $message);
+        return new Status(Status::TYPE_WARNING, $message);
     }
 }

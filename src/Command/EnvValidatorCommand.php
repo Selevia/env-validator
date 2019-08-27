@@ -52,9 +52,9 @@ class EnvValidatorCommand extends Command
 
         $response = $this->getValidator()->execute();
 
-        $successResponses = $response->getVarResponseList(Status::STATUS_SUCCESS);
-        $warningResponses = $response->getVarResponseList(Status::STATUS_WARNING);
-        $errorResponses = $response->getVarResponseList(Status::STATUS_ERROR);
+        $successResponses = $response->getVarResponseList(Status::TYPE_SUCCESS);
+        $warningResponses = $response->getVarResponseList(Status::TYPE_WARNING);
+        $errorResponses = $response->getVarResponseList(Status::TYPE_ERROR);
 
         $this->printTitle(count($successResponses), count($warningResponses), count($errorResponses), $io);
         $this->printMessages($errorResponses, $warningResponses, $io);
