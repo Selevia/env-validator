@@ -14,9 +14,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class EnvValidatorCommand extends Command
 {
+
     public const COMMAND_NAME = 'env_validator:validate';
     public const COMMAND_DESCRIPTION = 'Validate env variables';
-    public const COMMAND_HELP = self::COMMAND_DESCRIPTION;
+    public const COMMAND_HELP = 'The Validator will load the variables, validate them, and provide a summary of the results';
 
 
     /**
@@ -39,7 +40,7 @@ class EnvValidatorCommand extends Command
         $this->setName(self::COMMAND_NAME);
 
         $this->setDescription(self::COMMAND_DESCRIPTION);
-        $this->setHelp(self::COMMAND_DESCRIPTION);
+        $this->setHelp(self::COMMAND_HELP);
     }
 
     /**
