@@ -97,7 +97,7 @@ class VariableSet
      */
     public function toArray(): array
     {
-        return $this->getVariables()->toArray();
+        return array_values($this->getVariables()->toArray());
     }
 
     /**
