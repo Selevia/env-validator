@@ -25,13 +25,13 @@ class Status
     protected $status;
 
     /**
-     * @var
+     * @var string
      */
     protected $message;
 
     public function __construct(string $status, string $message)
     {
-        $this->status = $status;
+        $this->setStatus($status);
         $this->message = $message;
     }
 
@@ -46,12 +46,12 @@ class Status
     /**
      * @param string $status
      *
-     * @throws LogicException
+     * @throws LogicException When the status type is unrecognized
      */
     protected function setStatus(string $status): void
     {
         if (!in_array($status, self::STATUS_LIST, true)) {
-            throw new LogicException("Given status is not provided: $status");
+            throw new LogicException("Unrecognized status: $status");
         }
 
         $this->status = $status;
