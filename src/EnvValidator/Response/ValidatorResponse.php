@@ -32,19 +32,21 @@ class ValidatorResponse
     }
 
     /**
-     * @param string|null $filter
+     * Returns the individual var results, either all of them or filtered by Status type
+     *
+     * @param string|null $statusType
      *
      * @return VarResponse[]
      */
-    public function getVarResponseList(string $filter = null): array
+    public function getVarResponseList(string $statusType = null): array
     {
-        if ($filter === null) {
+        if ($statusType === null) {
 
             return $this->varResponseList;
         }
 
-        return array_filter($this->varResponseList, static function (VarResponse $varResponse) use ($filter) {
-            return $varResponse->getStatus()->getStatus() === $filter;
+        return array_filter($this->varResponseList, static function (VarResponse $varResponse) use ($statusType) {
+            return $varResponse->getStatus()->getType() === $statusType;
         });
     }
 
