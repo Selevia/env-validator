@@ -4,6 +4,8 @@
 namespace Selevia\EnvValidator\Validator;
 
 
+use Selevia\EnvValidator\Validator\Exception\FileNotFoundException;
+use Selevia\EnvValidator\Validator\Exception\InvalidFormatException;
 use Selevia\EnvValidator\Validator\Result\ValidationResult;
 use Selevia\EnvValidator\Validator\Result\VarResult;
 use Selevia\EnvValidator\Validator\Status\StatusFactory;
@@ -38,6 +40,9 @@ class Validator
      * Validates the loaded env vars and provides the results
      *
      * @return ValidationResult
+     *
+     * @throws FileNotFoundException
+     * @throws InvalidFormatException
      */
     public function validate(): ValidationResult
     {
