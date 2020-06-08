@@ -48,7 +48,7 @@ class EnvValidatorCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -57,7 +57,7 @@ class EnvValidatorCommand extends Command
         } catch (FileNotFoundException|InvalidFormatException $e) {
             $io->error($e->getMessage());
 
-            return;
+            return self::FAILURE;
         }
 
         $successResults = $result->listVarResults(Status::TYPE_SUCCESS);
@@ -66,6 +66,8 @@ class EnvValidatorCommand extends Command
 
         $this->printTitle(count($successResults), count($warningResults), count($errorResults), $io);
         $this->printMessages($errorResults, $warningResults, $io);
+
+        return self::SUCCESS;
     }
 
     /**
