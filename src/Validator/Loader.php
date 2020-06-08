@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Validator;
+namespace Selevia\EnvValidator\Validator;
 
 
-use Selevia\Common\EnvValidator\Validator\Variable\VariableSet;
+use Selevia\EnvValidator\Validator\Variable\VariableSet;
 
 interface Loader
 {

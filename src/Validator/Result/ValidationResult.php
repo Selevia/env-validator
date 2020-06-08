@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Validator\Result;
+namespace Selevia\EnvValidator\Validator\Result;
 
 
 class ValidationResult

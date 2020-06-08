@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Validator\Variable;
+namespace Selevia\EnvValidator\Validator\Variable;
 
 
 class Variable

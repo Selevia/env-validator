@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Validator;
+namespace Selevia\EnvValidator\Validator;
 
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Dotenv\Dotenv;
 use Dotenv\Environment\Adapter\ArrayAdapter;
 use Dotenv\Environment\DotenvFactory;
-use Selevia\Common\EnvValidator\Validator\Variable\Variable;
-use Selevia\Common\EnvValidator\Validator\Variable\VariableSet;
+use Selevia\EnvValidator\Validator\Variable\Variable;
+use Selevia\EnvValidator\Validator\Variable\VariableSet;
 
 class DotEnvLoader implements Loader
 {
