@@ -5,12 +5,22 @@
   "license": "Copyright Selevia",
   "require": {
     "symfony/console": "^4.3",
-    "vlucas/phpdotenv": "^3.4"
+    "vlucas/phpdotenv": "^3.4",
+    "doctrine/collections": "^1.6",
+    "beberlei/assert": "^3.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.3",
+    "codedungeon/phpunit-result-printer": "^0.26.2"
   },
   "autoload": {
     "psr-4": {
-      "Selevia\\Common\\EnvValidator\\": "src/"
+      "Selevia\\Common\\EnvValidator\\": "src/",
+      "Selevia\\Common\\EnvValidatorTest\\": "test/"
     }
   },
-  "bin": ["bin/env-validator"]
+  "bin": ["bin/env-validator"],
+  "scripts": {
+    "test": "phpunit --colors=always"
+  }
 }

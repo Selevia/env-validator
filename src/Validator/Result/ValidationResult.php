@@ -4,8 +4,6 @@
 namespace Selevia\Common\EnvValidator\Validator\Result;
 
 
-use Selevia\Common\EnvValidator\Validator\Result\VarResult;
-
 class ValidationResult
 {
 

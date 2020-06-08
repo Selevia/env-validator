@@ -4,9 +4,12 @@
 namespace Selevia\Common\EnvValidator\Validator;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Dotenv\Dotenv;
 use Dotenv\Environment\Adapter\ArrayAdapter;
 use Dotenv\Environment\DotenvFactory;
+use Selevia\Common\EnvValidator\Validator\Variable\Variable;
+use Selevia\Common\EnvValidator\Validator\Variable\VariableSet;
 
 class DotEnvLoader implements Loader
 {
@@ -49,21 +52,40 @@ class DotEnvLoader implements Loader
     /**
      * @inheritdoc
      */
-    public function loadActualVariables(): array
+    public function loadActualVariables(): VariableSet
     {
         $dotenv = Dotenv::create($this->getPath(), $this->getEnvFileActual(), new DotenvFactory([new ArrayAdapter()]));
 
-        return $dotenv->load();
+        return $this->createVariableSet($dotenv);
     }
 
     /**
      * @inheritdoc
      */
-    public function loadExpectedVariables(): array
+    public function loadExpectedVariables(): VariableSet
     {
         $dotenv = Dotenv::create($this->getPath(), $this->getEnvFileExpected(), new DotenvFactory([new ArrayAdapter()]));
 
-        return $dotenv->load();
+        return $this->createVariableSet($dotenv);
+    }
+
+    /**
+     * Create VariableSet for given Dotenv variables
+     *
+     * @param Dotenv $dotenv
+     *
+     * @return VariableSet
+     */
+    protected function createVariableSet(Dotenv $dotenv): VariableSet
+    {
+        $rawVariables = $dotenv->load();
+
+        $variableList = [];
+        foreach ($rawVariables as $name => $value) {
+            $variableList[] = new Variable($name, $value);
+        }
+
+        return new VariableSet(new ArrayCollection($variableList));
     }
 
     protected function getPath(): string
