@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidatorTest\Validator\Variable;
+namespace Selevia\EnvValidatorTest\Validator\Variable;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Selevia\Common\EnvValidator\Validator\Variable\Variable;
-use Selevia\Common\EnvValidator\Validator\Variable\VariableSet;
+use Selevia\EnvValidator\Validator\Variable\Variable;
+use Selevia\EnvValidator\Validator\Variable\VariableSet;
 use PHPUnit\Framework\TestCase;
 
 class VariableSetTest extends TestCase

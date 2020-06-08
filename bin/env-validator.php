@@ -1,6 +1,6 @@
 <?php
 
-use Selevia\Common\EnvValidator\Command\EnvValidatorCommandFactory;
+use Selevia\EnvValidator\Command\EnvValidatorCommandFactory;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 

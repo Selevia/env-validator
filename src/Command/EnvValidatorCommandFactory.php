@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Command;
+namespace Selevia\EnvValidator\Command;
 
 
-use Selevia\Common\EnvValidator\Validator\DotEnvLoader;
-use Selevia\Common\EnvValidator\Validator\Status\StatusFactory;
-use Selevia\Common\EnvValidator\Validator\Validator;
+use Selevia\EnvValidator\Validator\DotEnvLoader;
+use Selevia\EnvValidator\Validator\Status\StatusFactory;
+use Selevia\EnvValidator\Validator\Validator;
 
 class EnvValidatorCommandFactory
 {
