@@ -4,6 +4,8 @@
 namespace Selevia\EnvValidator\Command;
 
 
+use Selevia\EnvValidator\Validator\Exception\FileNotFoundException;
+use Selevia\EnvValidator\Validator\Exception\InvalidFormatException;
 use Selevia\EnvValidator\Validator\Result\VarResult;
 use Selevia\EnvValidator\Validator\Status\Status;
 use Selevia\EnvValidator\Validator\Validator;
@@ -50,7 +52,13 @@ class EnvValidatorCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $result = $this->getValidator()->validate();
+        try {
+            $result = $this->getValidator()->validate();
+        } catch (FileNotFoundException|InvalidFormatException $e) {
+            $io->error($e->getMessage());
+
+            return;
+        }
 
         $successResults = $result->listVarResults(Status::TYPE_SUCCESS);
         $warningResults = $result->listVarResults(Status::TYPE_WARNING);
