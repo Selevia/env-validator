@@ -6,10 +6,9 @@ namespace Selevia\EnvValidator\Validator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Dotenv\Dotenv;
-use Dotenv\Environment\Adapter\ArrayAdapter;
-use Dotenv\Environment\DotenvFactory;
 use Dotenv\Exception\InvalidFileException;
 use Dotenv\Exception\InvalidPathException;
+use Dotenv\Repository\RepositoryBuilder;
 use Selevia\EnvValidator\Validator\Exception\FileNotFoundException;
 use Selevia\EnvValidator\Validator\Exception\InvalidFormatException;
 use Selevia\EnvValidator\Validator\Variable\Variable;
@@ -58,9 +57,7 @@ class DotEnvLoader implements Loader
      */
     public function loadActualVariables(): VariableSet
     {
-        $dotenv = Dotenv::create($this->getPath(), $this->getEnvFileActual(), new DotenvFactory([new ArrayAdapter()]));
-
-        return $this->createVariableSet($dotenv, $this->getEnvFileActual());
+        return $this->loadForFile($this->getEnvFileActual());
     }
 
     /**
@@ -68,9 +65,28 @@ class DotEnvLoader implements Loader
      */
     public function loadExpectedVariables(): VariableSet
     {
-        $dotenv = Dotenv::create($this->getPath(), $this->getEnvFileExpected(), new DotenvFactory([new ArrayAdapter()]));
+        return $this->loadForFile($this->getEnvFileExpected());
+    }
 
-        return $this->createVariableSet($dotenv, $this->getEnvFileExpected());
+    /**
+     * Returns list of variables for given filename
+     *
+     * @param string $filename
+     *
+     * @return VariableSet
+     *
+     * @throws FileNotFoundException
+     * @throws InvalidFormatException
+     */
+    protected function loadForFile(string $filename): VariableSet
+    {
+        $repository = RepositoryBuilder::createWithNoAdapters()
+            ->immutable()
+            ->make();
+
+        $dotenv = Dotenv::create($repository, $this->getPath(), $filename);
+
+        return $this->createVariableSet($dotenv, $filename);
     }
 
     /**
