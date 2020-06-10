@@ -9,8 +9,10 @@ use Selevia\EnvValidator\Validator\Exception\InvalidFormatException;
 use Selevia\EnvValidator\Validator\Result\VarResult;
 use Selevia\EnvValidator\Validator\Status\Status;
 use Selevia\EnvValidator\Validator\Validator;
+use Selevia\EnvValidator\Validator\ValidatorFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -21,17 +23,22 @@ class EnvValidatorCommand extends Command
     public const COMMAND_DESCRIPTION = 'Validate env variables';
     public const COMMAND_HELP = 'The Validator will load the variables, validate them, and provide a summary of the results';
 
+    protected const OPTION_ACTUAL = 'actual';
+    protected const OPTION_EXPECTED = 'expected';
+    protected const DEFAULT_ACTUAL_ENV_FILE = '.env';
+    protected const DEFAULT_EXPECTED_ENV_FILE = '.env.example';
+
 
     /**
-     * @var Validator
+     * @var ValidatorFactory
      */
-    protected $validator;
+    protected $validatorFactory;
 
-    public function __construct(Validator $validator)
+    public function __construct(ValidatorFactory $validatorFactory)
     {
         parent::__construct();
 
-        $this->validator = $validator;
+        $this->validatorFactory = $validatorFactory;
     }
 
     /**
@@ -43,6 +50,22 @@ class EnvValidatorCommand extends Command
 
         $this->setDescription(self::COMMAND_DESCRIPTION);
         $this->setHelp(self::COMMAND_HELP);
+
+        $this->addOption(
+            self::OPTION_ACTUAL,
+            'a',
+            InputOption::VALUE_REQUIRED,
+            'Actual environment filename',
+            self::DEFAULT_ACTUAL_ENV_FILE
+        );
+
+        $this->addOption(
+            self::OPTION_EXPECTED,
+            'e',
+            InputOption::VALUE_REQUIRED,
+            'Expected environment filename',
+            self::DEFAULT_EXPECTED_ENV_FILE
+        );
     }
 
     /**
@@ -52,8 +75,10 @@ class EnvValidatorCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        $validator = $this->createValidator($input);
+
         try {
-            $result = $this->getValidator()->validate();
+            $result = $validator->validate();
         } catch (FileNotFoundException|InvalidFormatException $e) {
             $io->error($e->getMessage());
 
@@ -68,6 +93,21 @@ class EnvValidatorCommand extends Command
         $this->printMessages($errorResults, $warningResults, $io);
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Create Validator for provided input
+     *
+     * @param InputInterface $input
+     *
+     * @return Validator
+     */
+    protected function createValidator(InputInterface $input): Validator
+    {
+        $actual = $input->getOption(self::OPTION_ACTUAL);
+        $expected = $input->getOption(self::OPTION_EXPECTED);
+
+        return $this->getValidatorFactory()->createForFilenames($actual, $expected);
     }
 
     /**
@@ -103,10 +143,10 @@ class EnvValidatorCommand extends Command
     }
 
     /**
-     * @return Validator
+     * @return ValidatorFactory
      */
-    protected function getValidator(): Validator
+    protected function getValidatorFactory(): ValidatorFactory
     {
-        return $this->validator;
+        return $this->validatorFactory;
     }
 }
