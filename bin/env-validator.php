@@ -1,7 +1,8 @@
 <?php
 
 use Selevia\EnvValidator\Command\EnvValidatorCommandFactory;
-use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 
@@ -20,4 +21,8 @@ if (!$loader) {
 $commandFactory = new EnvValidatorCommandFactory();
 $command = $commandFactory();
 
-$command->run(new ArrayInput([]), new ConsoleOutput());
+$app = new Application();
+$app->add($command);
+$app->setDefaultCommand($command->getName(), true);
+
+$app->run(new ArgvInput(), new ConsoleOutput());

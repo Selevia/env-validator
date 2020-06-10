@@ -17,9 +17,6 @@ use Selevia\EnvValidator\Validator\Variable\VariableSet;
 class DotEnvLoader implements Loader
 {
 
-    protected const DEFAULT_ACTUAL_ENV_FILE = '.env';
-    protected const DEFAULT_EXPECTED_ENV_FILE = '.env.example';
-
     /**
      * @var string
      */
@@ -42,11 +39,8 @@ class DotEnvLoader implements Loader
      * @param string $envFileActual
      * @param string $envFileExpected
      */
-    public function __construct(
-        string $path,
-        string $envFileActual = self::DEFAULT_ACTUAL_ENV_FILE,
-        string $envFileExpected = self::DEFAULT_EXPECTED_ENV_FILE
-    ) {
+    public function __construct(string $path, string $envFileActual, string $envFileExpected)
+    {
         $this->path = $path;
         $this->envFileActual = $envFileActual;
         $this->envFileExpected = $envFileExpected;
