@@ -41,15 +41,15 @@ class VariableSet
     /**
      * Returns true if the Variable with the name of the provided Variable is in the set
      *
-     * @param Variable $variable
+     * @param string $variableName
      *
      * @return bool
      */
-    public function contains(Variable $variable): bool
+    public function contains(string $variableName): bool
     {
         return $this->getVariables()->exists(
-            static function ($key, Variable $existingVariable) use ($variable): bool {
-                return $existingVariable->getName() === $variable->getName();
+            static function ($key, Variable $existingVariable) use ($variableName): bool {
+                return $existingVariable->getName() === $variableName;
             }
         );
     }
@@ -66,7 +66,7 @@ class VariableSet
         return new static(
             $this->getVariables()->filter(
                 static function (Variable $variable) use ($anotherSet): bool {
-                    return $anotherSet->contains($variable);
+                    return $anotherSet->contains($variable->getName());
                 }
             )
         );
@@ -84,7 +84,7 @@ class VariableSet
         return new static(
             $this->getVariables()->filter(
                 static function (Variable $variable) use ($subtrahend): bool {
-                    return !$subtrahend->contains($variable);
+                    return !$subtrahend->contains($variable->getName());
                 }
             )
         );
