@@ -78,7 +78,7 @@ class VariableSetTest extends TestCase
         $variableSetThatContainsSomeVariables = new VariableSet(new ArrayCollection($someVariables));
 
         // When
-        $doesItContain = $variableSetThatContainsSomeVariables->contains(reset($someVariables));
+        $doesItContain = $variableSetThatContainsSomeVariables->contains(reset($someVariables)->getName());
 
         // Then
         $this->assertTrue($doesItContain);
@@ -101,10 +101,10 @@ class VariableSetTest extends TestCase
 
 
         // When
-        $anotherVariable = new Variable('other', 'some value');
+        $anotherVariableName = 'other';
 
-        $doesNonEmptySetContainAnotherVariable = $variableSetThatContainsSomeVariables->contains($anotherVariable);
-        $doesEmptySetContainAVariable = $emptyVariableSet->contains($anotherVariable);
+        $doesNonEmptySetContainAnotherVariable = $variableSetThatContainsSomeVariables->contains($anotherVariableName);
+        $doesEmptySetContainAVariable = $emptyVariableSet->contains($anotherVariableName);
 
         // Then
         $this->assertFalse($doesNonEmptySetContainAnotherVariable);
