@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Validator\Status;
+namespace Selevia\EnvValidator\Validator\Status;
 
 
 use LogicException;

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidatorTest\Validator\Variable;
+namespace Selevia\EnvValidatorTest\Validator\Variable;
 
-use Selevia\Common\EnvValidator\Validator\Variable\Variable;
+use Selevia\EnvValidator\Validator\Variable\Variable;
 use PHPUnit\Framework\TestCase;
 
 class VariableTest extends TestCase

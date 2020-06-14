@@ -1,21 +1,21 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Validator;
+namespace Selevia\EnvValidator\Validator;
 
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Dotenv\Dotenv;
-use Dotenv\Environment\Adapter\ArrayAdapter;
-use Dotenv\Environment\DotenvFactory;
-use Selevia\Common\EnvValidator\Validator\Variable\Variable;
-use Selevia\Common\EnvValidator\Validator\Variable\VariableSet;
+use Dotenv\Exception\InvalidFileException;
+use Dotenv\Exception\InvalidPathException;
+use Dotenv\Repository\RepositoryBuilder;
+use Selevia\EnvValidator\Validator\Exception\FileNotFoundException;
+use Selevia\EnvValidator\Validator\Exception\InvalidFormatException;
+use Selevia\EnvValidator\Validator\Variable\Variable;
+use Selevia\EnvValidator\Validator\Variable\VariableSet;
 
 class DotEnvLoader implements Loader
 {
-
-    protected const DEFAULT_ACTUAL_ENV_FILE = '.env';
-    protected const DEFAULT_EXPECTED_ENV_FILE = '.env.example';
 
     /**
      * @var string
@@ -39,11 +39,8 @@ class DotEnvLoader implements Loader
      * @param string $envFileActual
      * @param string $envFileExpected
      */
-    public function __construct(
-        string $path,
-        string $envFileActual = self::DEFAULT_ACTUAL_ENV_FILE,
-        string $envFileExpected = self::DEFAULT_EXPECTED_ENV_FILE
-    ) {
+    public function __construct(string $path, string $envFileActual, string $envFileExpected)
+    {
         $this->path = $path;
         $this->envFileActual = $envFileActual;
         $this->envFileExpected = $envFileExpected;
@@ -54,9 +51,7 @@ class DotEnvLoader implements Loader
      */
     public function loadActualVariables(): VariableSet
     {
-        $dotenv = Dotenv::create($this->getPath(), $this->getEnvFileActual(), new DotenvFactory([new ArrayAdapter()]));
-
-        return $this->createVariableSet($dotenv);
+        return $this->loadForFile($this->getEnvFileActual());
     }
 
     /**
@@ -64,21 +59,50 @@ class DotEnvLoader implements Loader
      */
     public function loadExpectedVariables(): VariableSet
     {
-        $dotenv = Dotenv::create($this->getPath(), $this->getEnvFileExpected(), new DotenvFactory([new ArrayAdapter()]));
+        return $this->loadForFile($this->getEnvFileExpected());
+    }
 
-        return $this->createVariableSet($dotenv);
+    /**
+     * Returns list of variables for given filename
+     *
+     * @param string $filename
+     *
+     * @return VariableSet
+     *
+     * @throws FileNotFoundException
+     * @throws InvalidFormatException
+     */
+    protected function loadForFile(string $filename): VariableSet
+    {
+        $repository = RepositoryBuilder::createWithNoAdapters()
+            ->immutable()
+            ->make();
+
+        $dotenv = Dotenv::create($repository, $this->getPath(), $filename);
+
+        return $this->createVariableSet($dotenv, $filename);
     }
 
     /**
      * Create VariableSet for given Dotenv variables
      *
      * @param Dotenv $dotenv
+     * @param string $filename
      *
      * @return VariableSet
+     *
+     * @throws FileNotFoundException
+     * @throws InvalidFormatException
      */
-    protected function createVariableSet(Dotenv $dotenv): VariableSet
+    protected function createVariableSet(Dotenv $dotenv, string $filename): VariableSet
     {
-        $rawVariables = $dotenv->load();
+        try {
+            $rawVariables = $dotenv->load();
+        } catch (InvalidPathException $e) {
+            throw FileNotFoundException::fromFilename($filename);
+        } catch (InvalidFileException $e) {
+            throw InvalidFormatException::fromFilename($filename);
+        }
 
         $variableList = [];
         foreach ($rawVariables as $name => $value) {

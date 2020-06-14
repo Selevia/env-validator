@@ -1,13 +1,15 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidator\Validator;
+namespace Selevia\EnvValidator\Validator;
 
 
-use Selevia\Common\EnvValidator\Validator\Result\ValidationResult;
-use Selevia\Common\EnvValidator\Validator\Result\VarResult;
-use Selevia\Common\EnvValidator\Validator\Status\StatusFactory;
-use Selevia\Common\EnvValidator\Validator\Variable\VariableSet;
+use Selevia\EnvValidator\Validator\Exception\FileNotFoundException;
+use Selevia\EnvValidator\Validator\Exception\InvalidFormatException;
+use Selevia\EnvValidator\Validator\Result\ValidationResult;
+use Selevia\EnvValidator\Validator\Result\VarResult;
+use Selevia\EnvValidator\Validator\Status\StatusFactory;
+use Selevia\EnvValidator\Validator\Variable\VariableSet;
 
 class Validator
 {
@@ -38,6 +40,9 @@ class Validator
      * Validates the loaded env vars and provides the results
      *
      * @return ValidationResult
+     *
+     * @throws FileNotFoundException
+     * @throws InvalidFormatException
      */
     public function validate(): ValidationResult
     {

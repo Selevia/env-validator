@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Selevia\Common\EnvValidatorTest\Validator\Variable;
+namespace Selevia\EnvValidatorTest\Validator\Variable;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Selevia\Common\EnvValidator\Validator\Variable\Variable;
-use Selevia\Common\EnvValidator\Validator\Variable\VariableSet;
+use Selevia\EnvValidator\Validator\Variable\Variable;
+use Selevia\EnvValidator\Validator\Variable\VariableSet;
 use PHPUnit\Framework\TestCase;
 
 class VariableSetTest extends TestCase
@@ -78,7 +78,7 @@ class VariableSetTest extends TestCase
         $variableSetThatContainsSomeVariables = new VariableSet(new ArrayCollection($someVariables));
 
         // When
-        $doesItContain = $variableSetThatContainsSomeVariables->contains(reset($someVariables));
+        $doesItContain = $variableSetThatContainsSomeVariables->contains(reset($someVariables)->getName());
 
         // Then
         $this->assertTrue($doesItContain);
@@ -101,10 +101,10 @@ class VariableSetTest extends TestCase
 
 
         // When
-        $anotherVariable = new Variable('other', 'some value');
+        $anotherVariableName = 'other';
 
-        $doesNonEmptySetContainAnotherVariable = $variableSetThatContainsSomeVariables->contains($anotherVariable);
-        $doesEmptySetContainAVariable = $emptyVariableSet->contains($anotherVariable);
+        $doesNonEmptySetContainAnotherVariable = $variableSetThatContainsSomeVariables->contains($anotherVariableName);
+        $doesEmptySetContainAVariable = $emptyVariableSet->contains($anotherVariableName);
 
         // Then
         $this->assertFalse($doesNonEmptySetContainAnotherVariable);
